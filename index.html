@@ -247,6 +247,71 @@
       margin: 0 auto;
     }
 
+    /* Visual Showcase */
+    .showcase-section {
+      margin: 40px 0 70px;
+    }
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+    .showcase-card {
+      background: #080a0f;
+      border: 1px solid rgba(0, 240, 255, 0.25);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 0 35px rgba(0, 240, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+    .showcase-card:hover {
+      border-color: var(--primary);
+      box-shadow: 0 0 45px rgba(255, 75, 145, 0.2);
+    }
+    .showcase-header {
+      background: #0d1117;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .showcase-title {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--cyan);
+    }
+    .showcase-img-wrap {
+      background: #030508;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0;
+      overflow: hidden;
+    }
+    .showcase-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+    .showcase-img:hover {
+      transform: scale(1.008);
+    }
+    .vga-wrap {
+      background: #000;
+      padding: 24px;
+      text-align: center;
+    }
+    .vga-img {
+      max-width: 720px;
+      width: 100%;
+      border: 2px solid rgba(0, 240, 255, 0.3);
+      border-radius: 8px;
+      box-shadow: 0 0 25px rgba(0, 240, 255, 0.2);
+      image-rendering: pixelated;
+    }
+
     /* Feature Grid */
     .section-header {
       text-align: center;
@@ -415,6 +480,7 @@
       </div>
       <div class="nav-links">
         <a href="#about">About</a>
+        <a href="#showcase">Showcase</a>
         <a href="#features">Features</a>
         <a href="#desktops">Desktops</a>
         <a href="#quickstart">Quick Start</a>
@@ -446,6 +512,46 @@
         <a href="#quickstart" class="btn btn-secondary">
           ⚡ Quickstart & Guide
         </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Visual Showcase Gallery -->
+  <section class="container showcase-section" id="showcase">
+    <div class="section-header">
+      <h2 class="section-title">Visual Showcase</h2>
+      <p class="section-subtitle">Live system overview, mascot artwork, and bare-metal kernel console</p>
+    </div>
+
+    <div class="showcase-grid">
+      <div class="showcase-card">
+        <div class="showcase-header">
+          <div class="window-dots">
+            <div class="dot red"></div>
+            <div class="dot yellow"></div>
+            <div class="dot green"></div>
+          </div>
+          <span class="showcase-title">docs/showcase.png — Yuna OS Live & Web Showcase</span>
+          <span class="tag">Screenshot PNG</span>
+        </div>
+        <div class="showcase-img-wrap">
+          <img src="docs/showcase.png" alt="Yuna OS Showcase Screenshot" class="showcase-img">
+        </div>
+      </div>
+
+      <div class="showcase-card">
+        <div class="showcase-header">
+          <div class="window-dots">
+            <div class="dot red"></div>
+            <div class="dot yellow"></div>
+            <div class="dot green"></div>
+          </div>
+          <span class="showcase-title">docs/vga.png — Bare-Metal x86_64 Rust Kernel (VGA Text Console 80x25)</span>
+          <span class="tag">Bare-Metal x86_64</span>
+        </div>
+        <div class="showcase-img-wrap vga-wrap">
+          <img src="docs/vga.png" alt="Bare-Metal Kernel VGA Console" class="showcase-img vga-img">
+        </div>
       </div>
     </div>
   </section>

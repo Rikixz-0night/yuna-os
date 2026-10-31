@@ -69,6 +69,25 @@ pub fn desktop_packages(desktop: Desktop) -> Vec<&'static str> {
             "kde-graphics-meta",
         ],
         Desktop::Gnome => vec!["gnome", "gnome-tweaks", "gdm"],
+        Desktop::Xfce => vec![
+            "xfce4-session",
+            "xfwm4",
+            "xfdesktop",
+            "xfce4-panel",
+            "xfce4-settings",
+            "xfce4-terminal",
+            "xfce4-appfinder",
+            "thunar",
+            "thunar-volman",
+            "tumbler",
+            "xfce4-power-manager",
+            "xfce4-pulseaudio-plugin",
+            "xfce4-whiskermenu-plugin",
+            "xfce4-notifyd",
+            "pavucontrol",
+            "lightdm",
+            "lightdm-gtk-greeter",
+        ],
         Desktop::Hyprland => vec![
             "hyprland",
             "xdg-desktop-portal-hyprland",
@@ -81,6 +100,25 @@ pub fn desktop_packages(desktop: Desktop) -> Vec<&'static str> {
             "greetd-tuigreet",
             "noto-fonts",
             "ttf-jetbrains-mono-nerd",
+        ],
+        Desktop::Sway => vec![
+            "sway",
+            "swaylock",
+            "swayidle",
+            "waybar",
+            "wofi",
+            "foot",
+            "xdg-desktop-portal-wlr",
+            "xdg-desktop-portal-gtk",
+            "polkit-gnome",
+            "greetd",
+            "greetd-tuigreet",
+        ],
+        Desktop::Cinnamon => vec![
+            "cinnamon",
+            "nemo",
+            "lightdm",
+            "lightdm-gtk-greeter",
         ],
     }
 }
@@ -202,6 +240,19 @@ pub fn packages(plan: &Plan) -> Vec<String> {
         "noto-fonts-emoji".into(),
         "ttf-dejavu".into(),
         "ttf-liberation".into(),
+        // Disk & filesystem support
+        "f2fs-tools".into(),
+        "ntfs-3g".into(),
+        "exfatprogs".into(),
+        "smartmontools".into(),
+        "nvme-cli".into(),
+        // Hardware & guest drivers
+        "sof-firmware".into(),
+        "alsa-firmware".into(),
+        "alsa-utils".into(),
+        "libinput".into(),
+        "xf86-input-libinput".into(),
+        "qemu-guest-agent".into(),
         "yuna-tools".into(),
         "yuna-release".into(),
     ];
@@ -251,7 +302,10 @@ pub fn display_manager(desktop: Desktop) -> Option<&'static str> {
         Desktop::None => None,
         Desktop::Kde => Some("sddm"),
         Desktop::Gnome => Some("gdm"),
+        Desktop::Xfce => Some("lightdm"),
         Desktop::Hyprland => Some("greetd"),
+        Desktop::Sway => Some("greetd"),
+        Desktop::Cinnamon => Some("lightdm"),
     }
 }
 

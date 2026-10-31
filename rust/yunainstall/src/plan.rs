@@ -7,6 +7,7 @@ pub enum Filesystem {
     Ext4,
     Btrfs,
     Xfs,
+    F2fs,
 }
 
 impl Filesystem {
@@ -15,6 +16,7 @@ impl Filesystem {
             Filesystem::Ext4 => "ext4",
             Filesystem::Btrfs => "btrfs",
             Filesystem::Xfs => "xfs",
+            Filesystem::F2fs => "f2fs",
         }
     }
 
@@ -23,6 +25,7 @@ impl Filesystem {
             "ext4" => Some(Filesystem::Ext4),
             "btrfs" => Some(Filesystem::Btrfs),
             "xfs" => Some(Filesystem::Xfs),
+            "f2fs" => Some(Filesystem::F2fs),
             _ => None,
         }
     }
@@ -32,6 +35,7 @@ impl Filesystem {
             Filesystem::Ext4 => "mkfs.ext4",
             Filesystem::Btrfs => "mkfs.btrfs",
             Filesystem::Xfs => "mkfs.xfs",
+            Filesystem::F2fs => "mkfs.f2fs",
         }
     }
 
@@ -40,6 +44,7 @@ impl Filesystem {
             Filesystem::Ext4 => "e2fsprogs",
             Filesystem::Btrfs => "btrfs-progs",
             Filesystem::Xfs => "xfsprogs",
+            Filesystem::F2fs => "f2fs-tools",
         }
     }
 }
@@ -75,7 +80,10 @@ pub enum Desktop {
     None,
     Kde,
     Gnome,
+    Xfce,
     Hyprland,
+    Sway,
+    Cinnamon,
 }
 
 impl Desktop {
@@ -84,7 +92,10 @@ impl Desktop {
             Desktop::None => "none",
             Desktop::Kde => "kde",
             Desktop::Gnome => "gnome",
+            Desktop::Xfce => "xfce",
             Desktop::Hyprland => "hyprland",
+            Desktop::Sway => "sway",
+            Desktop::Cinnamon => "cinnamon",
         }
     }
 
@@ -93,7 +104,10 @@ impl Desktop {
             "none" | "console" => Some(Desktop::None),
             "kde" | "plasma" => Some(Desktop::Kde),
             "gnome" => Some(Desktop::Gnome),
+            "xfce" | "xfce4" | "xfce3" => Some(Desktop::Xfce),
             "hyprland" | "hypr" => Some(Desktop::Hyprland),
+            "sway" => Some(Desktop::Sway),
+            "cinnamon" => Some(Desktop::Cinnamon),
             _ => None,
         }
     }
@@ -332,7 +346,7 @@ impl Plan {
                 "keymap" => plan.keymap = value.to_string(),
                 "filesystem" => {
                     plan.filesystem = Filesystem::from_name(value)
-                        .ok_or_else(|| format!("unknown filesystem `{value}` (ext4, btrfs, xfs)"))?
+                        .ok_or_else(|| format!("unknown filesystem `{value}` (ext4, btrfs, xfs, f2fs)"))?
                 }
                 "kernel" => {
                     plan.kernel = Kernel::from_name(value)
@@ -340,7 +354,7 @@ impl Plan {
                 }
                 "desktop" => {
                     plan.desktop = Desktop::from_name(value)
-                        .ok_or_else(|| format!("unknown desktop `{value}` (none, kde, gnome, hyprland)"))?
+                        .ok_or_else(|| format!("unknown desktop `{value}` (none, kde, gnome, xfce, hyprland, sway, cinnamon)"))?
                 }
                 "drivers" | "gpu" => {
                     plan.drivers = Drivers::from_name(value).ok_or_else(|| {

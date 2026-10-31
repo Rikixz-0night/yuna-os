@@ -137,9 +137,9 @@ sudo yunainstall --config examples/yuna.conf --yes  # do it
 
 | option | values |
 |--------|--------|
-| filesystem | `ext4`, `btrfs`, `xfs` |
+| filesystem | `ext4`, `btrfs` (with `@` / `@home` subvolumes & zstd), `xfs`, `f2fs` (flash/NVMe optimized) |
 | kernel | `linux`, `linux-lts`, `linux-zen` |
-| desktop | `none`, `kde`, `gnome`, `hyprland` |
+| desktop | `none`, `kde`, `xfce` (or `xfce3`/`xfce4`), `hyprland`, `gnome`, `sway`, `cinnamon` |
 | drivers | `auto` (open-source), `none`, `intel`, `amd`, `nvidia` (proprietary `nvidia-dkms`) |
 | bootloader | `systemd-boot` (UEFI), `grub` (UEFI + BIOS) |
 | swap | `none`, `zram` |

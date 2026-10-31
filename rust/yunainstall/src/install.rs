@@ -65,7 +65,34 @@ pub fn run(plan: &Plan, runner: &Runner) -> Result<(), String> {
     };
 
     runner.run(plan.filesystem.tool(), &filesystem_args(plan, &root_device))?;
-    runner.run("mount", &args(&[&root_device, "/mnt"]))?;
+
+    if plan.filesystem == crate::plan::Filesystem::Btrfs {
+        runner.run("mount", &args(&[&root_device, "/mnt"]))?;
+        runner.run("btrfs", &args(&["subvolume", "create", "/mnt/@"]))?;
+        runner.run("btrfs", &args(&["subvolume", "create", "/mnt/@home"]))?;
+        runner.run("umount", &args(&["/mnt"]))?;
+        runner.run(
+            "mount",
+            &args(&[
+                "-o",
+                "noatime,compress=zstd,subvol=@",
+                &root_device,
+                "/mnt",
+            ]),
+        )?;
+        runner.run("mkdir", &args(&["-p", "/mnt/home"]))?;
+        runner.run(
+            "mount",
+            &args(&[
+                "-o",
+                "noatime,compress=zstd,subvol=@home",
+                &root_device,
+                "/mnt/home",
+            ]),
+        )?;
+    } else {
+        runner.run("mount", &args(&[&root_device, "/mnt"]))?;
+    }
 
     if plan.uefi {
         runner.run("mkdir", &args(&["-p", "/mnt/boot"]))?;
@@ -115,11 +142,13 @@ fn args(values: &[&str]) -> Vec<String> {
 }
 
 fn filesystem_args(plan: &Plan, device: &str) -> Vec<String> {
-    let force = match plan.filesystem {
-        crate::plan::Filesystem::Ext4 => "-F",
-        crate::plan::Filesystem::Btrfs | crate::plan::Filesystem::Xfs => "-f",
-    };
-    args(&[force, "-L", "YUNA_ROOT", device])
+    match plan.filesystem {
+        crate::plan::Filesystem::Ext4 => args(&["-F", "-L", "YUNA_ROOT", device]),
+        crate::plan::Filesystem::Btrfs | crate::plan::Filesystem::Xfs => {
+            args(&["-f", "-L", "YUNA_ROOT", device])
+        }
+        crate::plan::Filesystem::F2fs => args(&["-f", "-l", "YUNA_ROOT", device]),
+    }
 }
 
 fn b64(value: &str) -> String {
@@ -335,7 +364,12 @@ pub fn post_script(plan: &Plan, root_uuid: &str, crypt_uuid: Option<&str>) -> St
         writeln!(script, "systemctl enable {}", manager).unwrap();
     }
 
-    if plan.desktop == Desktop::Hyprland {
+    if plan.desktop == Desktop::Hyprland || plan.desktop == Desktop::Sway {
+        let cmd = if plan.desktop == Desktop::Hyprland {
+            "Hyprland"
+        } else {
+            "sway"
+        };
         writeln!(script, "mkdir -p /etc/greetd").unwrap();
         writeln!(
             script,
@@ -347,7 +381,11 @@ pub fn post_script(plan: &Plan, root_uuid: &str, crypt_uuid: Option<&str>) -> St
         writeln!(script, "[terminal]").unwrap();
         writeln!(script, "vt = 1").unwrap();
         writeln!(script, "[default_session]").unwrap();
-        writeln!(script, "command = \"tuigreet --time --remember --cmd Hyprland\"").unwrap();
+        writeln!(
+            script,
+            "command = \"tuigreet --time --remember --cmd {cmd}\""
+        )
+        .unwrap();
         writeln!(script, "user = \"greeter\"").unwrap();
         writeln!(script, "YUNA_GREETD").unwrap();
     }

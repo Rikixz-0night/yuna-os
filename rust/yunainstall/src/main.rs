@@ -206,8 +206,9 @@ fn interactive() -> Plan {
         "filesystem",
         &[
             ("ext4  - safest, widely supported", Filesystem::Ext4),
-            ("btrfs - snapshots, compression", Filesystem::Btrfs),
-            ("xfs   - fast for large files", Filesystem::Xfs),
+            ("btrfs - modern CoW with @ and @home subvolumes", Filesystem::Btrfs),
+            ("xfs   - high performance for large files", Filesystem::Xfs),
+            ("f2fs  - Flash-Friendly File System (optimized for SSD/NVMe)", Filesystem::F2fs),
         ],
         0,
     );
@@ -232,8 +233,11 @@ fn interactive() -> Plan {
         &[
             ("none     - console only", Desktop::None),
             ("kde      - Plasma", Desktop::Kde),
-            ("gnome    - GNOME", Desktop::Gnome),
+            ("xfce     - lightweight Xfce desktop", Desktop::Xfce),
             ("hyprland - Wayland tiling", Desktop::Hyprland),
+            ("gnome    - GNOME", Desktop::Gnome),
+            ("sway     - i3-compatible Wayland", Desktop::Sway),
+            ("cinnamon - sleek traditional desktop", Desktop::Cinnamon),
         ],
         0,
     );

@@ -65,6 +65,31 @@ Full unicode, Asian CJK, and Khmer font support pre-installed in the live image 
   - `fstrim.timer` for SSD maintenance
   - `zram-generator` for RAM-compressed swap
 
+### 💾 Advanced Disk & Filesystem Stack
+- **Filesystem Support**:
+  - `ext4`: Reliable, widely supported standard Linux filesystem.
+  - `btrfs`: Modern Copy-on-Write filesystem formatted with automatic `@` (root) and `@home` (home directory) subvolumes, transparent `zstd` compression, and `noatime` mount flags for optimal NVMe/SSD longevity and instant snapshotting (Timeshift/Snapper ready).
+  - `xfs`: High-performance filesystem designed for large files and heavy I/O throughput.
+  - `f2fs`: Flash-Friendly File System designed from the ground up for modern NVMe drives, PCIe SSDs, eMMC, and flash cards.
+- **Disk Management Tools**: Pre-installed in the live environment and installed base:
+  - `smartmontools` (`smartctl` S.M.A.R.T. disk health diagnostics)
+  - `nvme-cli` (NVMe controller and namespace management)
+  - `ntfs-3g` (full read/write support for Windows NTFS disks)
+  - `exfatprogs` (exFAT USB drives and SD cards)
+  - `f2fs-tools` (`mkfs.f2fs`, `fsck.f2fs`)
+  - `gptfdisk`, `parted`, `dosfstools`, `mtools`, `e2fsprogs`, `btrfs-progs`, `xfsprogs`
+  - `cryptsetup` (LUKS2 full-disk encryption with Argon2id key derivation)
+
+### 🖥️ Desktop Environments
+Selectable interactively during `yunainstall` or via config files:
+- **KDE Plasma** (`desktop=kde`): Modern, beautiful desktop with SDDM display manager, Dolphin file manager, and Konsole.
+- **Xfce** (`desktop=xfce` / `xfce4` / `xfce3`): Classic, lightweight, ultra-responsive desktop with LightDM, Thunar, and Whisker menu.
+- **Hyprland** (`desktop=hyprland`): Bleeding-edge Wayland tiling compositor with smooth animations, Greetd/Tuigreet login, Waybar, Wofi, and Kitty.
+- **GNOME** (`desktop=gnome`): Polished, distraction-free environment powered by GDM and Wayland.
+- **Sway** (`desktop=sway`): High-speed, i3-compatible Wayland tiling window manager with Greetd/Tuigreet, Waybar, and Foot terminal.
+- **Cinnamon** (`desktop=cinnamon`): Elegant, traditional desktop layout with LightDM and Nemo file manager.
+- **Console** (`desktop=none`): Minimalist server/rescue installation.
+
 ### 🎨 Custom Boot Menu
 - **Syslinux (BIOS)**:
   - Custom anime-styled magenta and cyan highlight color palette (`archiso_head.cfg`)

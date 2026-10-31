@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yuna OS — Cambodia Anime Edition</title>
+  <meta name="description" content="Yuna OS: An Arch-based Linux distribution with Rust-native tooling, custom bare-metal kernel, Khmer and anime CJK typography, UFW firewall, Singapore mirrors, and guided installer. Made by Rikixz for Cambodia & anime fans.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Outfit:wght@300;400;600;700;800&family=Noto+Sans+Khmer:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0a0c10;
+      --bg-card: rgba(18, 22, 31, 0.75);
+      --bg-card-border: rgba(255, 75, 145, 0.25);
+      --primary: #ff4b91;
+      --primary-glow: rgba(255, 75, 145, 0.4);
+      --cyan: #00f0ff;
+      --cyan-glow: rgba(0, 240, 255, 0.35);
+      --purple: #9d4edd;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --code-bg: #0d1117;
+      --font-main: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text);
+      font-family: var(--font-main);
+      line-height: 1.6;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(255, 75, 145, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 85% 30%, rgba(0, 240, 255, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 50% 80%, rgba(157, 78, 221, 0.1) 0%, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    a {
+      color: var(--cyan);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    a:hover {
+      color: var(--primary);
+      text-shadow: 0 0 8px var(--primary-glow);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Navbar */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 12, 16, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      background: linear-gradient(135deg, var(--cyan), var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+    .nav-links a {
+      color: var(--text-muted);
+    }
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 80px 0 60px;
+      text-align: center;
+    }
+    .badge-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(8px);
+    }
+    .badge.pink {
+      border-color: var(--primary);
+      color: var(--primary);
+      box-shadow: 0 0 12px var(--primary-glow);
+    }
+    .badge.cyan {
+      border-color: var(--cyan);
+      color: var(--cyan);
+      box-shadow: 0 0 12px var(--cyan-glow);
+    }
+    .hero-title {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      letter-spacing: -1px;
+    }
+    .hero-title span.grad {
+      background: linear-gradient(135deg, #ffffff 10%, var(--cyan) 50%, var(--primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-desc {
+      max-width: 720px;
+      margin: 0 auto 36px;
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      font-weight: 300;
+    }
+    .cta-group {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #e0246a);
+      color: white;
+      box-shadow: 0 0 24px var(--primary-glow);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 32px var(--primary-glow);
+      color: white;
+    }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--cyan);
+      color: var(--cyan);
+      transform: translateY(-2px);
+    }
+
+    /* ASCII Showcase */
+    .ascii-section {
+      margin: 40px 0 80px;
+    }
+    .ascii-card {
+      background: #06080c;
+      border: 1px solid rgba(255, 75, 145, 0.3);
+      box-shadow: 0 0 30px rgba(255, 75, 145, 0.15);
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+    }
+    .ascii-header {
+      background: #0d1117;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .window-dots {
+      display: flex;
+      gap: 8px;
+    }
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .dot.red { background: #ff5f56; }
+    .dot.yellow { background: #ffbd2e; }
+    .dot.green { background: #27c93f; }
+    .ascii-title {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--cyan);
+    }
+    .ascii-body {
+      padding: 24px;
+      overflow-x: auto;
+      text-align: center;
+    }
+    pre.ascii-art {
+      font-family: var(--font-mono);
+      font-size: clamp(7px, 1.1vw, 13px);
+      line-height: 1.15;
+      color: var(--primary);
+      text-shadow: 0 0 10px rgba(255, 75, 145, 0.5);
+      white-space: pre;
+      display: inline-block;
+      margin: 0 auto;
+    }
+
+    /* Feature Grid */
+    .section-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+    .section-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .section-subtitle {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-bottom: 80px;
+    }
+    .card {
+      background: var(--bg-card);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 30px;
+      backdrop-filter: blur(12px);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .card:hover {
+      border-color: var(--cyan);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(0, 240, 255, 0.15);
+    }
+    .card-icon {
+      font-size: 2.2rem;
+      margin-bottom: 16px;
+      display: inline-block;
+    }
+    .card-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #fff;
+    }
+    .card-desc {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .tag {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      padding: 4px 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 6px;
+      color: var(--cyan);
+    }
+
+    /* Terminal Quickstart */
+    .terminal-section {
+      margin-bottom: 80px;
+    }
+    .terminal-box {
+      background: var(--code-bg);
+      border: 1px solid rgba(0, 240, 255, 0.25);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 0 35px rgba(0, 240, 255, 0.1);
+    }
+    .terminal-head {
+      background: #161b22;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .terminal-content {
+      padding: 24px;
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+    }
+    .term-line {
+      margin-bottom: 16px;
+    }
+    .term-comment {
+      color: #64748b;
+      margin-bottom: 4px;
+    }
+    .term-cmd {
+      color: var(--cyan);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .term-cmd::before {
+      content: '$';
+      color: var(--primary);
+      font-weight: bold;
+    }
+
+    /* Desktop Table */
+    .table-container {
+      overflow-x: auto;
+      margin-bottom: 80px;
+    }
+    table.custom-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--bg-card);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    table.custom-table th, table.custom-table td {
+      padding: 16px 20px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    table.custom-table th {
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--cyan);
+      font-weight: 700;
+    }
+    table.custom-table tr:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 40px 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+    .footer-text {
+      margin-bottom: 12px;
+    }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .hero-title { font-size: 2.3rem; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header>
+    <div class="container nav">
+      <div class="logo">
+        <span>YUNA OS</span>
+      </div>
+      <div class="nav-links">
+        <a href="#about">About</a>
+        <a href="#features">Features</a>
+        <a href="#desktops">Desktops</a>
+        <a href="#quickstart">Quick Start</a>
+        <a href="https://github.com/Rikixz-0night/yuna-os" target="_blank">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" id="about">
+    <div class="container">
+      <div class="badge-container">
+        <span class="badge pink">🌸 Cambodia Anime Edition</span>
+        <span class="badge cyan">⚡ Arch Base • Rust Soul</span>
+        <span class="badge">❤️ By Rikixz</span>
+      </div>
+      <h1 class="hero-title">
+        The Modern Linux Distro for <br>
+        <span class="grad">Cambodia & Anime Lovers</span>
+      </h1>
+      <p class="hero-desc">
+        Bleeding-edge Arch Linux rolling foundation, zero-dependency Rust system tooling, full Khmer & CJK anime typography, pre-configured UFW firewall, Singapore HTTPS mirrors for Southeast Asia, and guided installer <strong>yunainstall</strong>.
+      </p>
+      <div class="cta-group">
+        <a href="https://github.com/Rikixz-0night/yuna-os" target="_blank" class="btn btn-primary">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          View on GitHub
+        </a>
+        <a href="#quickstart" class="btn btn-secondary">
+          ⚡ Quickstart & Guide
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Anime ASCII Art Showcase -->
+  <section class="ascii-section container">
+    <div class="ascii-card">
+      <div class="ascii-header">
+        <div class="window-dots">
+          <div class="dot red"></div>
+          <div class="dot yellow"></div>
+          <div class="dot green"></div>
+        </div>
+        <div class="ascii-title">yuna-os-mascot.txt (portrait terminal banner)</div>
+        <div class="tag">Braille UTF-8</div>
+      </div>
+      <div class="ascii-body">
+        <pre class="ascii-art">
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣾⣿⣿⣿⣿⣷⢸⣿⣿⡜⢯⣷⡌⡻⣿⣿⣿⣆⢈⠻⠿⢿⣿⣿⣿⣿⣿⣿⣷⣦⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡁⢳⣿⣿⣿⣿⣿⣿⡜⣿⣿⣧⢀⢻⣷⠰⠈⢿⣿⣿⣧⢣⠉⠑⠪⢙⠿⠿⠿⠿⠿⠿⠿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣱⡇⡞⣿⣿⣿⣿⣿⣿⡇⣿⣿⡏⡄⣧⠹⡇⠧⠈⢻⣿⣿⡇⢧⢢⠀⠀⠑⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣇⢃⢿⣿⣿⣿⣿⣿⣷⣿⣿⠇⢃⣡⣤⡹⠐⣿⣀⢻⣿⣿⢸⡎⠳⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣾⣿⣿⠘⡸⣿⣿⣿⣿⣿⣿⣿⡿⣰⣿⣿⢟⡷⠈⠋⠃⠎⢿⣿⡏⣿⠀⠘⢆⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⡐⢹⣿⣿⡐⢡⢹⣿⣿⣿⣿⡏⣿⢣⣿⣿⡑⠁⠔⠀⠉⠉⠢⡘⣿⡇⣿⡇⠀⡀⠡⡀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⡇⠘⣿⣿⣇⠇⢣⢻⣿⣿⣿⡇⢇⣾⣿⣿⡆⢸⣤⡀⠚⢂⠀⢡⢿⡇⣿⡇⠀⢿⠀⠀⠄⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⠠⠹⣿⣿⡘⣆⢣⠻⣿⣿⢈⣾⣿⣿⣿⣶⣸⣏⢀⣬⣋⡼⣠⢸⢹⣿⡇⢠⣼⠙⡄⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⡇⠁⠹⣿⣇⠹⡃⠃⠙⡇⠘⢿⣿⣿⣿⣿⣿⣏⣓⣉⣭⣴⣿⠘⢸⣿⠁⠘⠋⠀⠹⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢷⠀⠀⠈⢿⣇⠂⣷⠄⠐⠀⠘⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢠⢸⡏⠀⢀⣠⣴⣾⣿⣶⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢆⠀⠀⠀⠙⠆⠈⠢⠲⠥⣰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡞⣸⠁⠀⢸⣿⣿⣿⣿⣿⣿⡆⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠄⠃⠀⠀⠘⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣿⡏⠹⣿⣿⡿⠫⠊⠀⠀⠀⣶⠀⢻⣿⣿⣿⣿⡿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠛⠻⠿⠿⠿⢋⠀⠀⠀⠀⢀⣼⣿⡆⠈⣿⣿⣿⡟⣱⡷⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢁⣁⡀⠨⣛⠿⠶⠄⢀⣠⣾⣿⣿⣷⠀⢹⣿⡟⣴⠈⢃⣶⠔⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣾⣿⣿⡄⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⡄⠈⣿⣿⡿⠀⡀⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢙⠻⣿⣿⢀⠙⠻⠿⣿⣿⣿⣿⣿⣿⡇⠁⣿⠟⡀⠈⣧⢰⣿⠆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠿⠴⠮⣥⠻⢧⣤⣄⣀⡉⢩⣭⣍⣃⣀⣩⠎⢀⣼⠉⣼⡯⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠑⠁⣛⠓⢒⣒⣢⡭⢁⡈⠿⠿⠟⠹⠛⠁⠀⠀⠀⠰⠃⠂⠀⠀⠀
+        </pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Grid -->
+  <section class="container" id="features">
+    <div class="section-header">
+      <h2 class="section-title">Engineered with Purpose</h2>
+      <p class="section-subtitle">Tailored for Cambodia, anime culture, and peak modern performance</p>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <span class="card-icon">🇰🇭</span>
+        <h3 class="card-title">Cambodia & Singapore Ready</h3>
+        <p class="card-desc">Preset to Cambodia Khmer Timezone (<code>Asia/Phnom_Penh</code>) and defaults to official Singapore HTTPS mirrors for ultra-low ping and max bandwidth in Cambodia.</p>
+        <div class="card-tags">
+          <span class="tag">Asia/Phnom_Penh</span>
+          <span class="tag">Singapore Mirrors</span>
+          <span class="tag">Reflector</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-icon">🌸</span>
+        <h3 class="card-title">Khmer & Anime Typography</h3>
+        <p class="card-desc">Out-of-the-box font support for Khmer script (<code>Noto Sans Khmer</code>), Japanese & CJK typography for anime media, color emojis, and crisp terminal bitmap fonts.</p>
+        <div class="card-tags">
+          <span class="tag">noto-fonts</span>
+          <span class="tag">noto-fonts-cjk</span>
+          <span class="tag">terminus-font</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-icon">🛡️</span>
+        <h3 class="card-title">TLS & UFW Firewall</h3>
+        <p class="card-desc">Enterprise-grade security preconfigured: UFW firewall with systemd integration, ca-certificates, OpenSSL, GnuTLS, curl, wget, and NTP time sync via systemd-timesyncd.</p>
+        <div class="card-tags">
+          <span class="tag">ufw</span>
+          <span class="tag">ca-certificates</span>
+          <span class="tag">systemd-timesyncd</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-icon">👤</span>
+        <h3 class="card-title">Live User & Root Credentials</h3>
+        <p class="card-desc">Live medium autologins into <code>yuna</code> on tty1 with full passwordless sudo permissions. Both live user and root share simple default credentials.</p>
+        <div class="card-tags">
+          <span class="tag">user: yuna (pass: yuna)</span>
+          <span class="tag">root (pass: yuna)</span>
+          <span class="tag">sudo</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-icon">💾</span>
+        <h3 class="card-title">Advanced Disks & Filesystems</h3>
+        <p class="card-desc">Full support for Btrfs (automatic <code>@</code> and <code>@home</code> subvolumes with zstd compression), F2FS (flash/NVMe optimized), Ext4, XFS, and LUKS2 disk encryption.</p>
+        <div class="card-tags">
+          <span class="tag">btrfs subvolumes</span>
+          <span class="tag">f2fs</span>
+          <span class="tag">LUKS2</span>
+          <span class="tag">smartmontools</span>
+          <span class="tag">nvme-cli</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-icon">🦀</span>
+        <h3 class="card-title">Rust Tooling & Kernel</h3>
+        <p class="card-desc">Custom native utilities written in Rust: <code>yuna-fetch</code>, <code>yuna-wifi</code>, and <code>yunainstall</code>, plus an experimental bare-metal x86_64 kernel in <code>kernel/</code>.</p>
+        <div class="card-tags">
+          <span class="tag">yunainstall</span>
+          <span class="tag">yuna-fetch</span>
+          <span class="tag">bare-metal kernel</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Desktops Section -->
+  <section class="container" id="desktops">
+    <div class="section-header">
+      <h2 class="section-title">Supported Desktop Environments</h2>
+      <p class="section-subtitle">Pick your preferred workflow directly inside <code>yunainstall</code></p>
+    </div>
+
+    <div class="table-container">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>Desktop</th>
+            <th>Configuration</th>
+            <th>Display Manager</th>
+            <th>Highlights</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>KDE Plasma</strong></td>
+            <td><code>desktop=kde</code></td>
+            <td>SDDM</td>
+            <td>Plasma 6, Dolphin, Konsole, Ark, Spectacle, full Wayland session</td>
+          </tr>
+          <tr>
+            <td><strong>Xfce</strong></td>
+            <td><code>desktop=xfce</code></td>
+            <td>LightDM</td>
+            <td>Lightweight, ultra-fast, Whisker menu, Thunar, classic stability</td>
+          </tr>
+          <tr>
+            <td><strong>Hyprland</strong></td>
+            <td><code>desktop=hyprland</code></td>
+            <td>Greetd (tuigreet)</td>
+            <td>Modern Wayland dynamic tiling compositor with fluid animations</td>
+          </tr>
+          <tr>
+            <td><strong>GNOME</strong></td>
+            <td><code>desktop=gnome</code></td>
+            <td>GDM</td>
+            <td>Clean, distraction-free interface with gestures and Wayland</td>
+          </tr>
+          <tr>
+            <td><strong>Sway</strong></td>
+            <td><code>desktop=sway</code></td>
+            <td>Greetd (tuigreet)</td>
+            <td>Drop-in i3-compatible Wayland tiling window manager, Waybar & Foot</td>
+          </tr>
+          <tr>
+            <td><strong>Cinnamon</strong></td>
+            <td><code>desktop=cinnamon</code></td>
+            <td>LightDM</td>
+            <td>Traditional, polished desktop with Nemo file manager</td>
+          </tr>
+          <tr>
+            <td><strong>Console</strong></td>
+            <td><code>desktop=none</code></td>
+            <td>None</td>
+            <td>Clean, minimal TTY environment with fastfetch & yuna tools</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Quick Start Terminal -->
+  <section class="container terminal-section" id="quickstart">
+    <div class="section-header">
+      <h2 class="section-title">Quick Start Commands</h2>
+      <p class="section-subtitle">Running on the live medium or building from source</p>
+    </div>
+
+    <div class="terminal-box">
+      <div class="terminal-head">
+        <div class="window-dots">
+          <div class="dot red"></div>
+          <div class="dot yellow"></div>
+          <div class="dot green"></div>
+        </div>
+        <span style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-muted);">yuna@live ~ (tty1)</span>
+        <span></span>
+      </div>
+      <div class="terminal-content">
+        <div class="term-line">
+          <div class="term-comment"># Connect to Wi-Fi via console client:</div>
+          <div class="term-cmd">yuna-wifi</div>
+        </div>
+        <div class="term-line">
+          <div class="term-comment"># Refresh & rank Singapore / Southeast Asia Arch mirrors:</div>
+          <div class="term-cmd">sudo yuna-mirrors</div>
+        </div>
+        <div class="term-line">
+          <div class="term-comment"># Inspect UFW firewall status:</div>
+          <div class="term-cmd">sudo ufw status verbose</div>
+        </div>
+        <div class="term-line">
+          <div class="term-comment"># Launch guided Yuna OS installer (KDE, Xfce, Hyprland, Btrfs, F2FS, encryption):</div>
+          <div class="term-cmd">yunainstall</div>
+        </div>
+        <div class="term-line">
+          <div class="term-comment"># Or preview an unattended install plan safely:</div>
+          <div class="term-cmd">yunainstall --dry-run --config examples/yuna.conf</div>
+        </div>
+        <div class="term-line">
+          <div class="term-comment"># Run project validation & kernel test suite:</div>
+          <div class="term-cmd">./test.sh</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p class="footer-text">
+        <strong>Yuna OS (Cambodia Anime Edition)</strong> • In Active Development
+      </p>
+      <p class="footer-text" style="color: var(--primary);">
+        Made with ❤️ by <strong>Rikixz</strong> • For Cambodia Community & Anime Fans (<em>For Cambodia com anime</em>)
+      </p>
+      <div class="footer-links">
+        <a href="https://github.com/Rikixz-0night/yuna-os" target="_blank">GitHub Repository</a>
+        <span>•</span>
+        <a href="DEVELOPMENT.md">Development Guide</a>
+        <span>•</span>
+        <a href="README.md">README</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

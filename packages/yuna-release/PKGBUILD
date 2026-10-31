@@ -1,0 +1,28 @@
+# Maintainer: Yuna OS <dev@yuna.local>
+pkgname=yuna-release
+pkgver=0.1.0
+pkgrel=2
+pkgdesc="Yuna OS release and branding files"
+arch=('x86_64')
+url="https://yuna.local"
+license=('MIT')
+depends=('filesystem')
+options=('!lto')
+install=yuna-release.install
+
+# /etc/os-release and /etc/issue are owned by `filesystem`, so the package
+# cannot ship them directly without a pacman file conflict. Instead it ships
+# the branding under /usr/lib/yuna and applies it from an install scriptlet,
+# with a pacman hook that re-applies it after a `filesystem` upgrade.
+package() {
+  install -Dm644 "$startdir/../../distro/airootfs/etc/os-release" \
+    "$pkgdir/usr/lib/yuna/os-release"
+  install -Dm644 "$startdir/../../distro/airootfs/etc/issue" \
+    "$pkgdir/usr/lib/yuna/issue"
+  install -Dm644 "$startdir/../../distro/airootfs/etc/motd" \
+    "$pkgdir/usr/lib/yuna/motd"
+
+  install -Dm755 "$startdir/yuna-branding" "$pkgdir/usr/bin/yuna-branding"
+  install -Dm644 "$startdir/yuna-branding.hook" \
+    "$pkgdir/usr/share/libalpm/hooks/zz-yuna-branding.hook"
+}

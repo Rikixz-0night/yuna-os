@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Refresh /etc/pacman.d/mirrorlist with the fastest Arch mirrors.
+#
+#   sudo yuna-mirrors            use the Yuna/reflector defaults
+#   sudo yuna-mirrors --country Germany,Netherlands
+#
+# Safe to run on the live medium (already root) and on an installed system.
+set -euo pipefail
+
+if [[ ${EUID} -ne 0 ]]; then
+    echo "yuna-mirrors: run as root (try: sudo yuna-mirrors)" >&2
+    exit 1
+fi
+
+if ! command -v reflector >/dev/null 2>&1; then
+    echo "yuna-mirrors: reflector is not installed (pacman -S reflector)" >&2
+    exit 1
+fi
+
+echo "==> ranking Singapore / Southeast Asia Arch mirrors (this can take a moment)"
+if [[ "$*" == *"--country"* ]]; then
+    reflector --protocol https --latest 20 --sort rate --save /etc/pacman.d/mirrorlist --verbose "$@"
+else
+    reflector --country Singapore --protocol https --latest 20 --sort rate --save /etc/pacman.d/mirrorlist --verbose "$@"
+fi
+
+echo
+echo "==> /etc/pacman.d/mirrorlist now starts with:"
+grep -m 5 '^Server' /etc/pacman.d/mirrorlist || true

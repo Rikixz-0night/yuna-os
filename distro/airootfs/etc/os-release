@@ -1,0 +1,11 @@
+NAME="Yuna OS"
+PRETTY_NAME="Yuna OS"
+ID=yuna
+ID_LIKE=arch
+BUILD_ID=rolling
+ANSI_COLOR="38;2;0;190;255"
+HOME_URL="https://yuna.local"
+DOCUMENTATION_URL="https://wiki.archlinux.org"
+SUPPORT_URL="https://yuna.local/support"
+BUG_REPORT_URL="https://yuna.local/bugs"
+LOGO=yuna

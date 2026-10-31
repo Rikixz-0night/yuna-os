@@ -1,0 +1,40 @@
+# Maintainer: Yuna OS <dev@yuna.local>
+pkgname=yuna-tools
+pkgver=0.1.0
+pkgrel=2
+pkgdesc="Yuna OS Rust tooling: yuna-fetch, yunainstall and yuna-wifi"
+arch=('x86_64')
+url="https://yuna.local"
+license=('MIT')
+depends=('glibc' 'gcc-libs')
+makedepends=('rust' 'cargo')
+options=('!lto' '!debug')
+
+build() {
+  mkdir -p "$srcdir/yuna-rust"
+  cp -r "$startdir/../../rust/Cargo.toml" \
+        "$startdir/../../rust/yuna-fetch" \
+        "$startdir/../../rust/yunainstall" \
+        "$startdir/../../rust/yuna-wifi" \
+        "$srcdir/yuna-rust/"
+
+  cd "$srcdir/yuna-rust"
+  export CARGO_TARGET_DIR="$srcdir/yuna-target"
+  cargo build --release --offline
+}
+
+package() {
+  install -Dm755 "$srcdir/yuna-target/release/yuna-fetch" "$pkgdir/usr/bin/yuna-fetch"
+  install -Dm755 "$srcdir/yuna-target/release/yunainstall" "$pkgdir/usr/bin/yunainstall"
+  install -Dm755 "$srcdir/yuna-target/release/yuna-wifi" "$pkgdir/usr/bin/yuna-wifi"
+
+  install -Dm755 "$startdir/../../distro/airootfs/usr/local/bin/yuna-mirrors" \
+    "$pkgdir/usr/bin/yuna-mirrors"
+
+  install -Dm644 "$startdir/../../distro/airootfs/usr/share/yuna/logo.txt" \
+    "$pkgdir/usr/share/yuna/logo.txt"
+  install -Dm644 "$startdir/../../distro/airootfs/etc/skel/.config/fastfetch/config.jsonc" \
+    "$pkgdir/etc/skel/.config/fastfetch/config.jsonc"
+  install -Dm644 "$startdir/../../distro/airootfs/etc/profile.d/yuna.sh" \
+    "$pkgdir/etc/profile.d/yuna.sh"
+}

@@ -1,0 +1,9 @@
+[Trigger]
+Type = Package
+Operation = Upgrade
+Target = filesystem
+
+[Action]
+Description = Reapplying Yuna OS branding...
+When = PostTransaction
+Exec = /usr/bin/yuna-branding

@@ -1,0 +1,10 @@
+[package]
+name = "yunainstall"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Yuna OS guided installer (archinstall-style)"
+
+[[bin]]
+name = "yunainstall"
+path = "src/main.rs"

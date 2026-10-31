@@ -1,0 +1,10 @@
+# Yuna OS shell defaults
+alias fetch='fastfetch'
+alias welcome='yuna-welcome'
+alias yuna='yunainstall'
+alias install='sudo yunainstall'
+alias yuna-fetch='yuna-fetch'
+alias wifi='yuna-wifi'
+alias net='nmtui'
+alias mirrors='sudo yuna-mirrors'
+alias update='sudo pacman -Syu'

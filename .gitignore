@@ -1,0 +1,18 @@
+# kernel
+kernel/target
+kernel/*.elf
+
+# rust tools
+rust/target
+
+# packaging
+packages/*/pkg
+packages/*/src
+packages/*/*.pkg.tar.*
+out/
+.work/
+.iso-profile/
+.pacman-cache/
+
+# misc
+*.iso

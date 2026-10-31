@@ -1,0 +1,25 @@
+
+
+  Y U N A   O S   —   live medium (Cambodia Anime Edition by Rikixz)
+
+  Credentials Live user : yuna   (password: yuna, sudo enabled)
+              Root user : root   (password: yuna)
+
+  Timezone    Cambodia Khmer (Asia/Phnom_Penh)
+  Mirrors     Singapore default (yuna-mirrors to refresh)
+
+  Wi-Fi       yuna-wifi            scan and connect
+              nmtui               full text interface
+              nmcli device wifi list
+
+  Firewall    sudo ufw status      firewall management
+
+  Install     yunainstall          guided
+              yunainstall --help   plans, dry run
+
+  Packages    pacman -Syu
+              pacman -S <package>  official Arch repositories
+
+  Everything is previewed before a single byte is written.
+
+

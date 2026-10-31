@@ -1,0 +1,18 @@
+##
+## Yuna OS - Arch Linux mirrorlist for the live medium.
+## Default mirror: Singapore (optimized for Cambodia / Southeast Asia low latency).
+##
+## pacman reads this file for the [core] and [extra] repositories, which is
+## exactly what makes `pacman -S <anything>` work from the live session and
+## from the installer. `yuna-mirrors` rewrites it with the fastest mirrors.
+##
+## The [yuna] repository inside the ISO is a separate, file:// stanza in
+## /etc/pacman.conf.
+##
+
+Server = https://singapore.mirror.pkgbuild.com/$repo/os/$arch
+Server = https://sg.mirrors.cicku.me/archlinux/$repo/os/$arch
+Server = https://mirror.aktkn.sg/archlinux/$repo/os/$arch
+Server = https://mirror.freedif.org/archlinux/$repo/os/$arch
+Server = https://mirror.sg.gs/archlinux/$repo/os/$arch
+Server = https://geo.mirror.pkgbuild.com/$repo/os/$arch

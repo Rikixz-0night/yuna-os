@@ -1,0 +1,14 @@
+#!/bin/sh
+# Apply the Yuna OS branding files. Idempotent: safe from an install scriptlet
+# and from the pacman hook that runs after `filesystem` upgrades.
+set -eu
+
+install -Dm644 /usr/lib/yuna/os-release /usr/lib/os-release
+
+# /etc/os-release is a symlink on a stock Arch system; replace it with a real
+# file so the branding survives even if /usr/lib/os-release is rewritten.
+rm -f /etc/os-release
+install -Dm644 /usr/lib/yuna/os-release /etc/os-release
+
+install -Dm644 /usr/lib/yuna/issue /etc/issue
+install -Dm644 /usr/lib/yuna/motd /etc/motd

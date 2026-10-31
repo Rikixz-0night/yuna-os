@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+# Yuna OS live welcome. Shows the machine, the network and what to do next.
+set -u
+
+cyan=$'\e[36m'; dim=$'\e[2m'; bold=$'\e[1m'; green=$'\e[32m'
+yellow=$'\e[33m'; reset=$'\e[0m'
+
+logo="/usr/share/yuna/logo.txt"
+if [[ ! -r "$logo" ]]; then
+    logo="$(dirname "$0")/../../share/yuna/logo.txt"
+fi
+
+printf '%s' "$cyan"
+cat "$logo" 2>/dev/null || echo "  Y U N A   O S"
+printf '%s' "$reset"
+printf '\n  %sYuna OS%s %s— Cambodia Anime Edition by Rikixz%s\n\n' "$bold" "$reset" "$dim" "$reset"
+
+printf '  edition  : %s\n' "Cambodia Anime Edition by Rikixz"
+printf '  live user: %s%s%s (password: %syuna%s, sudo enabled)\n' "$green" "yuna" "$reset" "$cyan" "$reset"
+printf '  root user: %s%s%s (password: %syuna%s)\n' "$green" "root" "$reset" "$cyan" "$reset"
+printf '  timezone : %s\n' "Asia/Phnom_Penh (Cambodia Khmer Time)"
+printf '  mirror   : %s\n' "Singapore (optimized for Cambodia / Southeast Asia)"
+printf '  firmware : %s\n' "$( [[ -d /sys/firmware/efi ]] && echo UEFI || echo BIOS )"
+printf '  kernel   : %s\n' "$(uname -r)"
+printf '  memory   : %s\n' "$(free -h | awk '/^Mem:/ {print $3 " / " $2}')"
+
+# ---------------------------------------------------------------- network ---
+printf '\n  %snetwork%s\n' "$bold" "$reset"
+if command -v nmcli >/dev/null 2>&1; then
+    wifi_state="$(nmcli -t -f DEVICE,TYPE,STATE device status 2>/dev/null | awk -F: '$2 == "wifi" {print $0; exit}')"
+    if [[ -n "$wifi_state" ]]; then
+        device="${wifi_state%%:*}"
+        rest="${wifi_state#*:}"
+        state="${rest#*:}"
+        connection="$(nmcli -t -f GENERAL.CONNECTION device show "$device" 2>/dev/null | head -1 | cut -d: -f2-)"
+        if [[ "$state" == "connected" ]]; then
+            printf '    wifi      %s%s%s  %s\n' "$green" "${connection:-connected}" "$reset" "($device)"
+        else
+            printf '    wifi      %s%s%s  %s\n' "$yellow" "$state" "$reset" "($device)"
+        fi
+    else
+        printf '    wifi      %sno wireless device%s\n' "$yellow" "$reset"
+    fi
+else
+    printf '    wifi      %sNetworkManager not available%s\n' "$yellow" "$reset"
+fi
+
+printf '\n    %sconnect:%s  yuna-wifi        scan, pick a network, type the password\n' "$bold" "$reset"
+printf '              nmtui            full NetworkManager text UI\n'
+printf '              nmcli device wifi list\n'
+printf '              nmcli device wifi connect "SSID" password "KEY"\n'
+
+# ------------------------------------------------------------------ disks ---
+printf '\n  %sblock devices%s\n' "$bold" "$reset"
+lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINTS | sed 's/^/    /'
+
+# ---------------------------------------------------------------- security ---
+printf '\n  %ssecurity & firewall%s\n' "$bold" "$reset"
+printf '    firewall  : ufw installed (%ssudo ufw status%s / %ssudo ufw enable%s)\n' "$cyan" "$reset" "$cyan" "$reset"
+printf '    tls/ssl   : ca-certificates + openssl + gnutls ready\n'
+
+# ---------------------------------------------------------------- install ---
+printf '\n  %sinstall Yuna OS%s\n' "$bold" "$reset"
+printf '    %syunainstall%s          guided: disk, user, filesystem, kernel, desktop, drivers\n' "$green" "$reset"
+printf '    yunainstall --help   unattended plans and --dry-run previews\n'
+printf '    %severything is previewed before a single byte is written%s\n' "$dim" "$reset"
+
+# ---------------------------------------------------------------- pacman ---
+printf '\n  %spackages%s   pacman -Syu   ·   pacman -S <package>   %s(official Arch repos)%s\n' \
+    "$bold" "$reset" "$dim" "$reset"
+printf '\n'

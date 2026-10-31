@@ -36,6 +36,11 @@ cp "$REPO"/*.pkg.tar.* "$STAGE/airootfs/opt/yuna/repo/"
 repo-add "$STAGE/airootfs/opt/yuna/repo/yuna.db.tar.gz" \
     "$STAGE"/airootfs/opt/yuna/repo/*.pkg.tar.* >/dev/null
 
+# Remove duplicate files provided by yuna-tools package so pacman does not conflict
+rm -f "$STAGE/airootfs/etc/profile.d/yuna.sh" \
+      "$STAGE/airootfs/etc/skel/.config/fastfetch/config.jsonc" \
+      "$STAGE/airootfs/usr/share/yuna/logo.txt"
+
 echo "==> running mkarchiso"
 mkarchiso -v -w "$ROOT/.work" -o "$ROOT/out" "$STAGE"
 

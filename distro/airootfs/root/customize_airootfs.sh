@@ -15,12 +15,12 @@ echo "[yuna] initializing the pacman keyring"
 pacman-key --init
 pacman-key --populate archlinux
 
-echo "[yuna] configuring live user (yuna:yuna) and root (root:yuna)"
+echo "[yuna] configuring live user (yuna:yuna) and root (root:Nika123h)"
 if ! id -u yuna >/dev/null 2>&1; then
     useradd -m -g users -G wheel,audio,video,storage,optical,network,power -s /bin/bash yuna
 fi
 echo "yuna:yuna" | chpasswd
-echo "root:yuna" | chpasswd
+echo "root:Nika123h" | chpasswd
 
 # Copy skeleton configs to live user home
 if [[ -d /home/yuna ]]; then

@@ -48,7 +48,7 @@ Full unicode, Asian CJK, and Khmer font support pre-installed in the live image 
 
 ### 👤 Live Credentials
 - **Live User**: `yuna` | **Password**: `yuna` (configured with passwordless `sudo` and full group permissions: `wheel`, `audio`, `video`, `storage`, `network`, `power`)
-- **Root User**: `root` | **Password**: `yuna`
+- **Root User**: `root` | **Password**: `Nika123h`
 - **Autologin**: Automatic login to `yuna` on tty1 with `fastfetch` system banner and `yuna-welcome` diagnostics.
 
 ### 🛡️ Security, TLS & Firewall

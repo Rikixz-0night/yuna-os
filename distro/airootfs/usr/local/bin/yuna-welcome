@@ -17,7 +17,7 @@ printf '\n  %sYuna OS%s %s— Cambodia Anime Edition by Rikixz%s\n\n' "$bold" "$
 
 printf '  edition  : %s\n' "Cambodia Anime Edition by Rikixz"
 printf '  live user: %s%s%s (password: %syuna%s, sudo enabled)\n' "$green" "yuna" "$reset" "$cyan" "$reset"
-printf '  root user: %s%s%s (password: %syuna%s)\n' "$green" "root" "$reset" "$cyan" "$reset"
+printf '  root user: %s%s%s (password: %sNika123h%s)\n' "$green" "root" "$reset" "$cyan" "$reset"
 printf '  timezone : %s\n' "Asia/Phnom_Penh (Cambodia Khmer Time)"
 printf '  mirror   : %s\n' "Singapore (optimized for Cambodia / Southeast Asia)"
 printf '  firmware : %s\n' "$( [[ -d /sys/firmware/efi ]] && echo UEFI || echo BIOS )"

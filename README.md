@@ -26,7 +26,7 @@ archinstall-style installer called **`yunainstall`**.
 ## Quick Start & Live Medium
 
 - **Live User**: `yuna` | **Password**: `yuna` (full `sudo` permissions)
-- **Root User**: `root` | **Password**: `yuna`
+- **Root User**: `root` | **Password**: `Nika123h`
 - **Default Timezone**: `Asia/Phnom_Penh` (Cambodia Khmer Time)
 - **Default Mirrors**: Singapore HTTPS mirrors for Southeast Asia low latency
 - **Firewall**: `ufw` pre-installed (`firewall` alias, `sudo ufw status`)
@@ -62,7 +62,7 @@ qemu-system-x86_64 -enable-kvm -m 4096 -cdrom out/yuna-*.iso
 ```
 
 The live system autologins `yuna` on tty1 (password `yuna`, full sudo access;
-root password is also `yuna`), prints the Yuna fastfetch banner and drops you
+root password is `Nika123h`), prints the Yuna fastfetch banner and drops you
 at a shell. NetworkManager is enabled, the UFW firewall is available, and the
 pacman keyring is already populated, so `pacman -S anything` works immediately.
 

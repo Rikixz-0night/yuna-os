@@ -193,26 +193,90 @@ qemu-system-x86_64 -enable-kvm -m 4096 -cdrom out/yuna-*.iso -boot d
 
 ---
 
-## 5. Guided Installer (`yunainstall`)
+## 5. Guided Installer Architecture (`yunainstall`)
 
-To test the installer without modifying partitions:
+`yunainstall` is an Archinstall-inspired installer written in pure Rust (`rust/yunainstall/`) with zero external runtime dependencies. It operates in both an interactive guided terminal mode and an automated declarative config mode.
+
+### Interactive Step-by-Step Flow
+
+When executed via `sudo yunainstall`, the installer executes the following sequence:
+
+1. **Target Disk Selection**:
+   - Queries `lsblk -b -J -p -O` through `disks::list()`.
+   - Displays all attached storage media with sizes, vendor/model names, and mounted/removable status.
+   - Requires unmounting any busy partitions prior to formatting.
+
+2. **System Identity & User Creation**:
+   - **Hostname**: Prompts for system hostname (validated against RFC 1123, max 63 characters).
+   - **Username**: Prompts for non-root username (validated against POSIX standards).
+   - **User Password**: Read via `stty -echo` with confirmation matching.
+   - **Root Password**: Prompts `use the same password for root? [Y/n]`. If `n`, collects a dedicated root password.
+   - **Wheel Privilege Provisioning**: In the chroot phase (`install::post_script`), the user is created via:
+     ```sh
+     useradd -m -G wheel -s /bin/bash "$USERNAME"
+     ```
+     and `%wheel ALL=(ALL:ALL) ALL` is written to `/etc/sudoers.d/10-wheel` with mode `0440`.
+
+3. **Locale, Keyboard & Timezone**:
+   - **Timezone**: Default preset to `Asia/Phnom_Penh` (validated against `/usr/share/zoneinfo/`).
+   - **Locale**: Default `en_US.UTF-8` (enabled in `/etc/locale.gen` and compiled with `locale-gen`).
+   - **Keymap**: Default `us` (written to `/etc/vconsole.conf`).
+
+4. **Storage & Partitioning (Curated Recommendations)**:
+   - **Filesystems**:
+     - `btrfs` **(Recommended for Snapshots)**: Creates subvolumes `@` for root and `@home` for `/home`. Mounts with `compress=zstd:1,noatime,space_cache=v2`. Enables instantaneous snapshotting with Timeshift or Snapper.
+     - `ext4` **(Recommended for Maximum Compatibility)**: Classic journaling filesystem formatted with `mkfs.ext4 -F -L YUNA_ROOT`.
+     - `f2fs` **(Recommended for NVMe/PCIe Flash Endurance)**: Flash-Friendly File System formatted with `mkfs.f2fs -f -l YUNA_ROOT`.
+     - `xfs`: Formatted with `mkfs.xfs -f -L YUNA_ROOT`.
+   - **Full-Disk Encryption**: Optional LUKS2 container formatted with `cryptsetup luksFormat --type luks2 --cipher aes-xts-plain64 --key-size 512 --pbkdf argon2id`.
+   - **EFI System Partition (ESP)**: Formatted as FAT32 (`mkfs.vfat -F 32 -n YUNA_ESP`), sized to 512 MiB by default.
+
+5. **Software & Kernel Selection**:
+   - **Kernel**:
+     - `linux` **(Recommended)**: Latest vanilla Arch Linux stable kernel.
+     - `linux-lts` **(Recommended for Long-Term Stability)**: Conservative, long-term support kernel.
+     - `linux-zen` **(Recommended for Gaming / Responsive Desktop)**: Tuned with low-latency Zen scheduler.
+   - **Desktop Environment**:
+     - `kde` **(Recommended for Modern Full-Featured Desktop)**: Plasma 6, SDDM, Dolphin, Konsole, Wayland.
+     - `hyprland` **(Recommended for Wayland Tiling)**: Hyprland, Greetd/Tuigreet, Waybar, Wofi, Kitty.
+     - `xfce` **(Recommended for Ultra-Lightweight)**: Classic Xfce desktop, LightDM, Thunar, minimal RAM.
+     - `gnome`, `sway`, `cinnamon`, or `none` (minimal console).
+
+6. **Graphics Drivers & Hardware Acceleration**:
+   - Auto-detects installed GPUs via PCI vendor IDs (Intel `0x8086`, AMD `0x1002`, NVIDIA `0x10de`).
+   - `auto` **(Recommended for Open-Source)**: Pulls `mesa` and modesetting drivers.
+   - `nvidia` **(Recommended for NVIDIA GPUs)**: Installs `nvidia-dkms`, `nvidia-utils`, and sets kernel argument `nvidia_drm.modeset=1`.
+   - `intel` (pulls `vulkan-intel`) and `amd` (pulls `vulkan-radeon`).
+
+7. **Swap Configuration**:
+   - `zram` **(Recommended)**: Installs `zram-generator` and sets `compression-algorithm = zstd`, eliminating disk wear on SSDs.
+   - `none`: Disables swap file creation.
+
+8. **Bootloader Setup**:
+   - Firmware auto-detected via `/sys/firmware/efi`.
+   - `systemd-boot` **(Recommended for UEFI)**: Installs `bootctl install` with loader configuration and entry `/boot/loader/entries/yuna.conf`.
+   - `grub`: Installs `grub-install` and `grub-mkconfig -o /boot/grub/grub.cfg`.
+
+9. **Installation Pipeline Execution**:
+   - Wipes old partition signatures with `wipefs -af`.
+   - Partitions with `sgdisk` (ESP type `ef00`, BIOS boot type `ef02`, Linux root type `8300`).
+   - Runs `pacstrap` to install base system, fonts, network tools, and security packages.
+   - Generates `/mnt/etc/fstab` using UUIDs (`genfstab -U /mnt`).
+   - Executes generated post-installation script inside `arch-chroot /mnt`.
+   - Unmounts target filesystems cleanly.
+
+### Non-Interactive & Automation Workflow
+
 ```sh
+# Generate template plan:
+yunainstall --example-config > my-plan.conf
+
+# Test configuration in dry-run mode (safe preview, no disk writes):
 yunainstall --dry-run --config examples/yuna.conf
-```
 
-To run the installation on target hardware:
-```sh
-sudo yunainstall
+# Execute automated install:
+sudo yunainstall --config examples/yuna.conf --yes
 ```
-
-`yunainstall` automatically:
-1. Detects UEFI or BIOS firmware.
-2. Partitions the drive with GPT (`sgdisk`).
-3. Sets up optional LUKS2 disk encryption (`cryptsetup`).
-4. Formats filesystems (`ext4`, `btrfs`, `xfs`).
-5. Runs `pacstrap` with base packages, font stack, TLS utilities, and UFW firewall.
-6. Generates `/root/yuna-post.sh` to configure timezone, locale, users, passwords, systemd services, and bootloader (`systemd-boot` or `grub`).
-7. Chroots and seals the newly installed operating system.
 
 ---
 

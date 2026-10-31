@@ -205,10 +205,10 @@ fn interactive() -> Plan {
     plan.filesystem = choose(
         "filesystem",
         &[
-            ("ext4  - safest, widely supported", Filesystem::Ext4),
-            ("btrfs - modern CoW with @ and @home subvolumes", Filesystem::Btrfs),
-            ("xfs   - high performance for large files", Filesystem::Xfs),
+            ("btrfs - modern CoW with @ and @home subvolumes (Recommended)", Filesystem::Btrfs),
+            ("ext4  - rock-solid classic journaling filesystem", Filesystem::Ext4),
             ("f2fs  - Flash-Friendly File System (optimized for SSD/NVMe)", Filesystem::F2fs),
+            ("xfs   - high performance for large enterprise files", Filesystem::Xfs),
         ],
         0,
     );
@@ -222,22 +222,22 @@ fn interactive() -> Plan {
     plan.kernel = choose(
         "kernel",
         &[
-            ("linux     - latest stable", Kernel::Linux),
-            ("linux-lts - long term support", Kernel::Lts),
-            ("linux-zen - desktop tuned", Kernel::Zen),
+            ("linux     - latest stable vanilla Arch kernel (Recommended)", Kernel::Linux),
+            ("linux-lts - long term support for rock-solid stability", Kernel::Lts),
+            ("linux-zen - desktop tuned with low-latency responsiveness", Kernel::Zen),
         ],
         0,
     );
     plan.desktop = choose(
         "desktop",
         &[
-            ("none     - console only", Desktop::None),
-            ("kde      - Plasma", Desktop::Kde),
-            ("xfce     - lightweight Xfce desktop", Desktop::Xfce),
-            ("hyprland - Wayland tiling", Desktop::Hyprland),
-            ("gnome    - GNOME", Desktop::Gnome),
-            ("sway     - i3-compatible Wayland", Desktop::Sway),
-            ("cinnamon - sleek traditional desktop", Desktop::Cinnamon),
+            ("kde      - Plasma 6 (Recommended for modern full-featured desktop)", Desktop::Kde),
+            ("hyprland - dynamic Wayland tiling compositor (modern & fluid)", Desktop::Hyprland),
+            ("xfce     - ultra-lightweight classic desktop (fast, minimal RAM)", Desktop::Xfce),
+            ("gnome    - modern streamlined GNOME Shell", Desktop::Gnome),
+            ("sway     - i3-compatible Wayland tiling window manager", Desktop::Sway),
+            ("cinnamon - traditional sleek desktop", Desktop::Cinnamon),
+            ("none     - minimal console only", Desktop::None),
         ],
         0,
     );
@@ -261,11 +261,11 @@ fn interactive() -> Plan {
     plan.drivers = choose(
         "graphics drivers",
         &[
-            ("auto    - open-source drivers for the GPU", Drivers::Auto),
-            ("none    - mesa only", Drivers::None),
-            ("intel   - mesa + vulkan-intel", Drivers::Intel),
+            ("auto    - open-source drivers (mesa + modesetting) (Recommended)", Drivers::Auto),
+            ("nvidia  - proprietary nvidia-dkms for GeForce/RTX cards", Drivers::Nvidia),
             ("amd     - mesa + vulkan-radeon", Drivers::Amd),
-            ("nvidia  - proprietary nvidia-dkms", Drivers::Nvidia),
+            ("intel   - mesa + vulkan-intel", Drivers::Intel),
+            ("none    - minimal mesa fallback only", Drivers::None),
         ],
         0,
     );
@@ -273,10 +273,10 @@ fn interactive() -> Plan {
     plan.swap = choose(
         "swap",
         &[
+            ("zram - compressed in-RAM swap (Recommended, zero disk wear)", Swap::Zram),
             ("none - no swap", Swap::None),
-            ("zram - compressed RAM swap", Swap::Zram),
         ],
-        1,
+        0,
     );
 
     ui::heading("Boot");
@@ -285,8 +285,8 @@ fn interactive() -> Plan {
         plan.bootloader = choose(
             "bootloader",
             &[
-                ("systemd-boot - simple, UEFI only", Bootloader::SystemdBoot),
-                ("grub         - flexible", Bootloader::Grub),
+                ("systemd-boot - simple, native UEFI bootloader (Recommended)", Bootloader::SystemdBoot),
+                ("grub         - universal bootloader with BIOS & multi-boot support", Bootloader::Grub),
             ],
             0,
         );

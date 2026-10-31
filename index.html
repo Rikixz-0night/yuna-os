@@ -570,6 +570,126 @@
       background: rgba(255, 255, 255, 0.06);
     }
 
+    /* Installation Guide */
+    .install-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      margin-bottom: 80px;
+    }
+    .install-step-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 26px;
+      transition: border-color 0.15s ease;
+    }
+    .install-step-card:hover {
+      border-color: var(--border-focus);
+    }
+    .step-card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      background: var(--bg-surface-elevated);
+      color: var(--cyan);
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .tag-rec {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 5px;
+      background: rgba(16, 185, 129, 0.12);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .step-title {
+      font-size: 1.22rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .step-desc {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+      margin-bottom: 14px;
+    }
+    .option-card {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      transition: all 0.15s ease;
+    }
+    .option-card.rec-card {
+      border-color: rgba(16, 185, 129, 0.35);
+      background: rgba(16, 185, 129, 0.035);
+    }
+    .option-card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .option-code {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      font-size: 0.88rem;
+      color: var(--text);
+    }
+    .option-detail {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .rec-box {
+      background: rgba(6, 182, 212, 0.05);
+      border-left: 3px solid var(--cyan);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 16px;
+      margin-top: 12px;
+      font-size: 0.86rem;
+      color: var(--text-muted);
+    }
+    .rec-box strong {
+      color: var(--cyan);
+    }
+    .step-actions {
+      margin-top: 14px;
+    }
+
     /* Footer */
     footer {
       border-top: 1px solid var(--border);
@@ -613,6 +733,7 @@
       </div>
       <div class="nav-links">
         <a href="#overview">Overview</a>
+        <a href="#installation">Installation</a>
         <a href="#showcase">Showcase</a>
         <a href="#architecture">Architecture</a>
         <a href="#desktops">Desktops</a>
@@ -646,13 +767,13 @@
       </p>
 
       <div class="cta-group">
-        <a href="https://github.com/Rikixz-0night/yuna-os" target="_blank" class="btn btn-primary">
+        <a href="#installation" class="btn btn-primary">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          Installation Guide
+        </a>
+        <a href="https://github.com/Rikixz-0night/yuna-os" target="_blank" class="btn btn-secondary">
           <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
           Source Code
-        </a>
-        <a href="#workflow" class="btn btn-secondary">
-          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-          Quick Start Guide
         </a>
       </div>
 
@@ -677,6 +798,392 @@
           <div class="spec-label">Primary Kernel</div>
           <div class="spec-value">Linux x86_64</div>
           <div class="spec-sub">Stable, LTS, or Zen</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Guided Installation Flow -->
+  <section class="container" id="installation">
+    <div class="section-head">
+      <span class="section-eyebrow">Interactive Deployment</span>
+      <h2 class="section-title">Step-by-Step Installation Guide</h2>
+      <p class="section-desc">Archinstall-style guided CLI workflow with automatic user creation, wheel sudo provisioning, and curated storage recommendations.</p>
+    </div>
+
+    <div class="install-timeline">
+      <!-- Step 1 -->
+      <div class="install-step-card">
+        <div class="step-card-head">
+          <div class="step-title">
+            <span class="step-badge">Step 01</span>
+            Live Medium Boot & Network Connection
+          </div>
+          <span class="tag-rec">Prerequisite</span>
+        </div>
+        <p class="step-desc">
+          Boot the Yuna OS ISO on any UEFI or legacy BIOS system. The live environment automatically logs into the unprivileged account <code>yuna</code> on tty1 with full root elevation capabilities via <code>sudo</code>.
+        </p>
+        <div class="options-grid">
+          <div class="option-card">
+            <div class="option-card-head">
+              <span class="option-code">Live User</span>
+              <span class="tag-rec">Default</span>
+            </div>
+            <div class="option-detail">User: <code>yuna</code> | Pass: <code>yuna</code> (wheel, audio, video, storage)</div>
+          </div>
+          <div class="option-card">
+            <div class="option-card-head">
+              <span class="option-code">Root Account</span>
+              <span class="tag-rec">Enabled</span>
+            </div>
+            <div class="option-detail">User: <code>root</code> | Pass: <code>yuna</code></div>
+          </div>
+          <div class="option-card rec-card">
+            <div class="option-card-head">
+              <span class="option-code">Wi-Fi Manager</span>
+              <span class="tag-rec">Recommended</span>
+            </div>
+            <div class="option-detail">Console Wi-Fi client: run <code>yuna-wifi</code> to scan and connect</div>
+          </div>
+          <div class="option-card rec-card">
+            <div class="option-card-head">
+              <span class="option-code">Mirror Ranking</span>
+              <span class="tag-rec">Recommended</span>
+            </div>
+            <div class="option-detail">Run <code>sudo yuna-mirrors</code> to rank Singapore HTTPS mirrors</div>
+          </div>
+        </div>
+        <div class="rec-box">
+          <strong>Network Tip:</strong> An active internet connection is required to fetch official Arch packages. Verify connectivity with <code>curl -I https://archlinux.org</code> before launching the installer.
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="install-step-card">
+        <div class="step-card-head">
+          <div class="step-title">
+            <span class="step-badge">Step 02</span>
+            Launch the Guided Installer
+          </div>
+          <span class="tag-rec">Interactive CLI</span>
+        </div>
+        <p class="step-desc">
+          Start the Rust-native guided installer from the terminal. The installer features colored prompts, default selections, and validation checks to prevent invalid configurations.
+        </p>
+        <div class="cmd-line" style="margin-top: 10px;">
+          <span class="cmd-text">sudo yunainstall</span>
+          <button class="btn-copy" onclick="copyCmd('sudo yunainstall', this)">Copy</button>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="install-step-card">
+        <div class="step-card-head">
+          <div class="step-title">
+            <span class="step-badge">Step 03</span>
+            Target Disk Selection & Partitioning
+          </div>
+          <span class="tag-rec">Storage Engine</span>
+        </div>
+        <p class="step-desc">
+          <code>yunainstall</code> queries <code>lsblk</code> and displays all attached drives. Select the target drive (e.g. <code>/dev/nvme0n1</code> or <code>/dev/sda</code>). The drive will be partitioned with a modern GPT partition table.
+        </p>
+        <div class="options-grid">
+          <div class="option-card rec-card">
+            <div class="option-card-head">
+              <span class="option-code">btrfs</span>
+              <span class="tag-rec">Recommended</span>
+            </div>
+            <div class="option-detail">
+              Modern Copy-on-Write with automatic <code>@</code> (root) and <code>@home</code> subvolumes plus <code>zstd</code> compression. Enables instant snapshot rollbacks via Timeshift or Snapper.
+            </div>
+          </div>
+          <div class="option-card">
+            <div class="option-card-head">
+              <span class="option-code">ext4</span>
+              <span style="font-size:0.75rem; color:var(--text-dim);">Classic</span>
+            </div>
+            <div class="option-detail">
+              Battle-tested standard journaling filesystem with universal compatibility and minimal CPU overhead.
+            </div>
+          </div>
+          <div class="option-card rec-card">
+            <div class="option-card-head">
+              <span class="option-code">f2fs</span>
+              <span class="tag-rec">Flash Pick</span>
+            </div>
+            <div class="option-detail">
+              Flash-Friendly File System designed for modern NVMe and PCIe SSDs to maximize IOPS and extend flash longevity.
+            </div>
+          </div>
+          <div class="option-card">
+            <div class="option-card-head">
+              <span class="option-code">xfs</span>
+              <span style="font-size:0.75rem; color:var(--text-dim);">Scalable</span>
+            </div>
+            <div class="option-detail">
+              High-performance 64-bit journaling filesystem optimized for large files and heavy parallel I/O.
+            </div>
+          </div>
+        </div>
+        <div class="rec-box">
+          <strong>Disk Recommendation:</strong> Choose <strong>Btrfs</strong> for modern desktop setups. <code>yunainstall</code> configures transparent zstd compression and isolated <code>@</code> and <code>@home</code> subvolumes so system updates can be rolled back without losing user files.
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="install-step-card">
+        <div class="step-card-head">
+          <div class="step-title">
+            <span class="step-badge">Step 04</span>
+            User Account Creation & Sudo Security
+          </div>
+          <span class="tag-rec">Identity & Wheel</span>
+        </div>
+        <p class="step-desc">
+          Configure your hostname, regular user account, and administrative passwords. User inputs are validated against standard POSIX naming conventions.
+        </p>
+        <div class="options-grid">
+          <div class="option-card">
+            <div class="option-card-head">
+              <span class="option-code">Hostname</span>
+              <span style="font-size:0.75rem; color:var(--text-dim);">Default: yuna</span>
+            </div>
+            <div class="option-detail">Machine network identifier (e.g. <code>yuna-station</code> or <code>yuna</code>).</div>
+          </div>
+          <div class="option-card rec-card">
+            <div class="option-card-head">
+              <span class="option-code">User Account</span>
+              <span class="tag-rec">Wheel Sudo</span>
+            </div>
+            <div class="option-detail">Primary user account. Automatically enrolled into the <code>wheel</code> administrative group.</div>
+          </div>
+          <div class="option-card">
+            <div class="option-card-head">
+              <span class="option-code">Password Masking</span>
+              <span style="font-size:0.75rem; color:var(--text-dim);">Hidden Input</span>
+            </div>
+            <div class="option-detail">Passwords are entered with terminal echo disabled and verified with double confirmation.</div>
+          </div>
+          <div class="option-card rec-card">
+            <div class="option-card-head">
+              <span class="option-code">Root Password</span>
+              <span class="tag-rec">Recommended</span>
+            </div>
+            <div class="option-detail">Prompt: <code>use the same password for root? [Y/n]</code>. Set same or separate secret.</div>
+          </div>
+        </div>
+        <div class="rec-box">
+          <strong>Security Guarantee:</strong> <code>yunainstall</code> automatically writes <code>%wheel ALL=(ALL:ALL) ALL</code> to <code>/etc/sudoers.d/10-wheel</code> with strict <code>0440</code> permissions, granting your regular account full administrative control without manual editing.
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="install-step-card">
+        <div class="step-card-head">
+          <div class="step-title">
+            <span class="step-badge">Step 05</span>
+            Localization, Timezone & Fonts
+          </div>
+          <span class="tag-rec">Cambodia Preset</span>
+        </div>
+        <p class="step-desc">
+          Localization parameters are verified against system zoneinfo databases and generated during chroot.
+        </p>
+        <div class="options-grid">
+          <div class="option-card rec-card">
+            <div class="option-card-head">
+              <span class="option-code">Timezone</span>
+              <span class="tag-rec">Recommended</span>
+            </div>
+            <div class="option-detail">Default preset: <code>Asia/Phnom_Penh</code> (Cambodia Khmer Time, UTC+7).</div>
+          </div>
+          <div class="option-card">
+            <div class="option-card-head">
+              <span class="option-code">Locale</span>
+              <span style="font-size:0.75rem; color:var(--text-dim);">UTF-8</span>
+            </div>
+            <div class="option-detail">Default preset: <code>en_US.UTF-8</code> with locale compilation.</div>
+          </div>
+          <div class="option-card">
+            <div class="option-card-head">
+              <span class="option-code">Keyboard Layout</span>
+              <span style="font-size:0.75rem; color:var(--text-dim);">Keymap</span>
+            </div>
+            <div class="option-detail">Default preset: <code>us</code> keyboard map in <code>/etc/vconsole.conf</code>.</div>
+          </div>
+          <div class="option-card rec-card">
+            <div class="option-card-head">
+              <span class="option-code">Font Stack</span>
+              <span class="tag-rec">Auto-Installed</span>
+            </div>
+            <div class="option-detail">Full Khmer (<code>noto-fonts</code>) and CJK anime (<code>noto-fonts-cjk</code>) typography pre-configured.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 6 -->
+      <div class="install-step-card">
+        <div class="step-card-head">
+          <div class="step-title">
+            <span class="step-badge">Step 06</span>
+            Linux Kernel Selection
+          </div>
+          <span class="tag-rec">Core Engine</span>
+        </div>
+        <p class="step-desc">
+          Select the Linux kernel package to be installed into <code>/boot</code> with automatic initial ramdisk (mkinitcpio) generation.
+        </p>
+        <div class="options-grid">
+          <div class="option-card rec-card">
+            <div class="option-card-head">
+              <span class="option-code">linux</span>
+              <span class="tag-rec">Recommended</span>
+            </div>
+            <div class="option-detail">Latest upstream stable vanilla Linux kernel. Recommended for current generation hardware.</div>
+          </div>
+          <div class="option-card">
+            <div class="option-card-head">
+              <span class="option-code">linux-lts</span>
+              <span style="font-size:0.75rem; color:var(--text-dim);">Long Term</span>
+            </div>
+            <div class="option-detail">Long Term Support kernel for mission-critical stability and older workstation compatibility.</div>
+          </div>
+          <div class="option-card rec-card">
+            <div class="option-card-head">
+              <span class="option-code">linux-zen</span>
+              <span class="tag-rec">Gaming / Low Latency</span>
+            </div>
+            <div class="option-detail">Desktop-tuned kernel with interactive scheduler optimizations for ultra-smooth responsiveness.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 7 -->
+      <div class="install-step-card">
+        <div class="step-card-head">
+          <div class="step-title">
+            <span class="step-badge">Step 07</span>
+            Desktop Environment Selection
+          </div>
+          <span class="tag-rec">User Interface</span>
+        </div>
+        <p class="step-desc">
+          Choose your desktop environment or window manager. <code>yunainstall</code> pulls all necessary display managers, session managers, audio stacks, and terminals.
+        </p>
+        <div class="options-grid">
+          <div class="option-card rec-card">
+            <div class="option-card-head">
+              <span class="option-code">kde</span>
+              <span class="tag-rec">Full Desktop</span>
+            </div>
+            <div class="option-detail">KDE Plasma 6, SDDM display manager, Dolphin file manager, Konsole terminal, Wayland session.</div>
+          </div>
+          <div class="option-card rec-card">
+            <div class="option-card-head">
+              <span class="option-code">hyprland</span>
+              <span class="tag-rec">Wayland Tiling</span>
+            </div>
+            <div class="option-detail">Dynamic Wayland tiling compositor, Greetd tuigreet login, Waybar, Wofi launcher, Kitty terminal.</div>
+          </div>
+          <div class="option-card rec-card">
+            <div class="option-card-head">
+              <span class="option-code">xfce</span>
+              <span class="tag-rec">Lightweight</span>
+            </div>
+            <div class="option-detail">Classic Xfce desktop, LightDM, Thunar, xfwm4. Extremely fast and low RAM usage.</div>
+          </div>
+          <div class="option-card">
+            <div class="option-card-head">
+              <span class="option-code">gnome / sway / cinnamon / none</span>
+              <span style="font-size:0.75rem; color:var(--text-dim);">Alternative</span>
+            </div>
+            <div class="option-detail">GNOME Shell (GDM), Sway tiling (tuigreet), Cinnamon desktop (LightDM), or minimal console only.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 8 -->
+      <div class="install-step-card">
+        <div class="step-card-head">
+          <div class="step-title">
+            <span class="step-badge">Step 08</span>
+            Graphics Drivers, Memory & Bootloader
+          </div>
+          <span class="tag-rec">Hardware Acceleration</span>
+        </div>
+        <p class="step-desc">
+          Finalize hardware driver integration, memory swapping policy, and bootloader installation.
+        </p>
+        <div class="options-grid">
+          <div class="option-card rec-card">
+            <div class="option-card-head">
+              <span class="option-code">drivers=auto</span>
+              <span class="tag-rec">Recommended</span>
+            </div>
+            <div class="option-detail">Open-source <code>mesa</code> and modesetting drivers for Intel and AMD graphics.</div>
+          </div>
+          <div class="option-card rec-card">
+            <div class="option-card-head">
+              <span class="option-code">drivers=nvidia</span>
+              <span class="tag-rec">NVIDIA GPUs</span>
+            </div>
+            <div class="option-detail">Proprietary <code>nvidia-dkms</code> driver with <code>nvidia_drm.modeset=1</code> kernel parameter.</div>
+          </div>
+          <div class="option-card rec-card">
+            <div class="option-card-head">
+              <span class="option-code">swap=zram</span>
+              <span class="tag-rec">Recommended</span>
+            </div>
+            <div class="option-detail">In-RAM compressed swap (<code>zram-generator</code> with zstd). Zero disk writes and maximum speed.</div>
+          </div>
+          <div class="option-card rec-card">
+            <div class="option-card-head">
+              <span class="option-code">bootloader=systemd-boot</span>
+              <span class="tag-rec">UEFI Recommended</span>
+            </div>
+            <div class="option-detail">Lightweight, native UEFI bootloader configured automatically with boot entries. (GRUB for BIOS).</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 9 -->
+      <div class="install-step-card">
+        <div class="step-card-head">
+          <div class="step-title">
+            <span class="step-badge">Step 09</span>
+            Plan Summary, Execution & First Boot
+          </div>
+          <span class="tag-rec">Automated Deployment</span>
+        </div>
+        <p class="step-desc">
+          <code>yunainstall</code> prints an aligned summary of your install plan. Upon typing <code>y</code>, the automated installation sequence executes:
+        </p>
+        <div class="options-grid">
+          <div class="option-card">
+            <div class="option-card-head"><span class="option-code">1. Partitioning</span></div>
+            <div class="option-detail">Wipes signatures, runs <code>sgdisk</code>, creates ESP and root partitions.</div>
+          </div>
+          <div class="option-card">
+            <div class="option-card-head"><span class="option-code">2. Filesystem & Subvolumes</span></div>
+            <div class="option-detail">Formats filesystem, provisions Btrfs subvolumes <code>@</code> and <code>@home</code>, mounts to <code>/mnt</code>.</div>
+          </div>
+          <div class="option-card">
+            <div class="option-card-head"><span class="option-code">3. Pacstrap Base</span></div>
+            <div class="option-detail">Installs base packages, kernel, firmware, fonts, TLS tools, and UFW firewall.</div>
+          </div>
+          <div class="option-card">
+            <div class="option-card-head"><span class="option-code">4. Chroot Configuration</span></div>
+            <div class="option-detail">Generates fstab, creates user in wheel, sets passwords, enables services, installs bootloader.</div>
+          </div>
+        </div>
+        <div class="cmd-line" style="margin-top: 14px;">
+          <span class="cmd-text">sudo reboot</span>
+          <button class="btn-copy" onclick="copyCmd('sudo reboot', this)">Copy</button>
+        </div>
+        <div class="rec-box" style="margin-top: 14px;">
+          <strong>Done:</strong> Remove the USB drive after shutdown and boot into your fresh Yuna OS installation!
         </div>
       </div>
     </div>

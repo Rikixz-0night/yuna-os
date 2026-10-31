@@ -118,37 +118,129 @@ Arch `filesystem` package, so `yuna-release` ships them under `/usr/lib/yuna`
 and a scriptlet copies them into place. A pacman hook re-applies them after a
 `filesystem` upgrade, so `pacman -Syu` never turns Yuna OS back into Arch.
 
-## Install it
+## Guided Installation (`yunainstall`)
+
+Yuna OS includes **`yunainstall`**, a fast, zero-dependency Archinstall-style guided installer written in Rust. It prompts you step by step, provides curated recommendations for each subsystem, creates users with wheel `sudo` permissions, and performs automated disk formatting and system deployment.
 
 ```sh
-yunainstall
+sudo yunainstall
 ```
 
-Guided flow: disk selection, hostname/user/passwords, timezone/locale/keymap,
-filesystem, kernel, desktop, graphics drivers, swap, LUKS2, bootloader, then a
-full plan summary before anything is written.
+### Step-by-Step Installation Walkthrough
 
-Non-interactive:
+```text
+    __  __ _   _ _  _    _
+    \ \/ /| | | | \| |  /_\
+     \  / | |_| | .` | / _ \
+     /  \ |  _  | |\  |/ ___ \
+    /_/\_\|_| |_|_| \_/_/   \_\
+         Yuna OS installer
+```
+
+1. **Live Environment & Network Setup**:
+   - Boot from the USB / ISO (UEFI or BIOS).
+   - The live session autologins user `yuna` on `tty1` (password `yuna`, full `sudo` access).
+   - Connect to Wi-Fi via `yuna-wifi` or `nmtui` (or plug an Ethernet cable).
+   - Test or optimize Singapore mirrors: `sudo yuna-mirrors`.
+
+2. **Launch the Installer**:
+   - Run `sudo yunainstall` from the terminal.
+
+3. **Select Target Disk**:
+   - `yunainstall` lists all attached storage drives (`/dev/nvme0n1`, `/dev/sda`, etc.) with model and capacity.
+   - Choose your target drive. *(Note: All existing partitions on this drive will be wiped and partitioned with a modern GPT layout)*.
+
+4. **System Identity & User Creation**:
+   - **Hostname**: Enter your machine name (default: `yuna`).
+   - **Username**: Enter your primary non-root username (default: `yuna`).
+   - **User Password**: Enter a secure password (input is masked for security).
+   - **Root Password**: Choose whether to reuse the user password for `root` (Recommended: `Yes`) or enter a dedicated root password.
+   - **Privilege Setup**: The created user is automatically enrolled in the `wheel` administrative group with full `sudo` rights enabled in `/etc/sudoers`.
+
+5. **Locale & Timezone**:
+   - **Timezone**: Default is preset to **`Asia/Phnom_Penh`** (Cambodia Khmer Time, UTC+7).
+   - **Locale**: Default is `en_US.UTF-8` (full Khmer script and CJK anime fonts are pre-installed).
+   - **Keymap**: Default is `us`.
+
+6. **Storage & Filesystem (Recommendations)**:
+   - **Filesystem Options**:
+     - `btrfs` **(Recommended for Snapshots)**: Formats with automated `@` (root) and `@home` (user home) subvolumes, transparent `zstd` compression, and `noatime` mount flags. Ready for instant Timeshift/Snapper rollback snapshots.
+     - `ext4` **(Recommended for Maximum Compatibility)**: Classic, rock-solid journaling filesystem with minimal overhead.
+     - `f2fs` **(Recommended for NVMe/PCIe SSD Endurance)**: Flash-Friendly File System optimized for modern solid-state drives.
+     - `xfs`: Enterprise-grade filesystem for massive throughput and large files.
+   - **Disk Encryption**: Optional LUKS2 full-disk encryption with Argon2id PBKDF.
+   - **ESP Size**: 512 MiB EFI System Partition (on UEFI systems).
+
+7. **Linux Kernel Flavor (Recommendations)**:
+   - `linux` **(Recommended)**: Latest upstream stable vanilla Linux kernel.
+   - `linux-lts` **(Recommended for Rock-Solid Stability)**: Long-Term Support kernel for servers and critical workstations.
+   - `linux-zen` **(Recommended for Desktop & Gaming)**: Tuned with low-latency kernel scheduler responsiveness.
+
+8. **Desktop Environment (Recommendations)**:
+   - `kde` **(Recommended for Full Modern Desktop)**: KDE Plasma 6 Wayland desktop with SDDM, Dolphin, and Konsole.
+   - `hyprland` **(Recommended for Modern Tiling)**: Fluid dynamic Wayland compositor with Tuigreet, Waybar, Wofi, and Kitty.
+   - `xfce` **(Recommended for Low-Spec / Minimal RAM)**: Ultra-lightweight classic desktop with LightDM and Thunar.
+   - `gnome`: Modern streamlined GNOME Shell with GDM.
+   - `sway`: i3-compatible Wayland tiling window manager.
+   - `cinnamon`: Traditional sleek panel desktop with Nemo.
+   - `none`: Minimalist console / server environment.
+
+9. **Graphics Drivers (Recommendations)**:
+   - Hardware detection auto-probes detected GPUs (Intel, AMD, NVIDIA).
+   - `auto` **(Recommended for Intel/AMD/Open-Source)**: Installs `mesa` and open-source modesetting drivers.
+   - `nvidia` **(Recommended for GeForce/RTX cards)**: Installs proprietary `nvidia-dkms`, modules, and sets `nvidia_drm.modeset=1`.
+   - `intel` / `amd` / `none`.
+
+10. **Memory & Swap (Recommendations)**:
+    - `zram` **(Recommended)**: In-RAM compressed swap (`systemd-zram-generator`), provides zero SSD wear and ultra-fast memory paging.
+    - `none`: Disables swap partition.
+
+11. **Bootloader (Recommendations)**:
+    - `systemd-boot` **(Recommended for UEFI)**: Native, blazing fast UEFI bootloader with custom boot entries.
+    - `grub` **(Recommended for BIOS / Multi-boot)**: Universal bootloader supporting BIOS and complex disk topologies.
+
+12. **Review Plan, Install & Reboot**:
+    - `yunainstall` outputs a full summary table of all configuration values.
+    - Confirm with `y` to write the changes to disk.
+    - Once finished, remove the installation media and reboot:
+      ```sh
+      sudo reboot
+      ```
+
+### Unattended / Automated Installation
+
+You can also run automated, non-interactive installations via configuration files:
 
 ```sh
-yunainstall --dry-run --config examples/yuna.conf   # preview every command
-sudo yunainstall --config examples/yuna.conf --yes  # do it
+# Generate template plan
+yunainstall --example-config > my-plan.conf
+
+# Preview the exact command pipeline without touching disk (Dry-Run)
+yunainstall --dry-run --config my-plan.conf
+
+# Perform automated installation
+sudo yunainstall --config my-plan.conf --yes
 ```
 
-| option | values |
-|--------|--------|
-| filesystem | `ext4`, `btrfs` (with `@` / `@home` subvolumes & zstd), `xfs`, `f2fs` (flash/NVMe optimized) |
-| kernel | `linux`, `linux-lts`, `linux-zen` |
-| desktop | `none`, `kde`, `xfce` (or `xfce3`/`xfce4`), `hyprland`, `gnome`, `sway`, `cinnamon` |
-| drivers | `auto` (open-source), `none`, `intel`, `amd`, `nvidia` (proprietary `nvidia-dkms`) |
-| bootloader | `systemd-boot` (UEFI), `grub` (UEFI + BIOS) |
-| swap | `none`, `zram` |
-| encryption | LUKS2 on the root partition |
-| firmware | UEFI GPT layout or BIOS (bios_grub) layout, detected automatically |
+Example configuration (`examples/yuna.conf`):
 
-The installer validates every string it writes (no shell injection from
-hostname/user/timezone), base64-wraps passwords before they touch the chroot
-script, refuses mounted disks, and requires root only for the real run.
+```ini
+disk=/dev/nvme0n1
+hostname=yuna
+username=yuna
+password=your-secure-password
+timezone=Asia/Phnom_Penh
+locale=en_US.UTF-8
+keymap=us
+filesystem=btrfs
+kernel=linux
+desktop=hyprland
+drivers=auto
+bootloader=systemd-boot
+swap=zram
+encrypt=false
+esp_mib=512
+```
 
 ## Live medium details
 
